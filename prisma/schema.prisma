@@ -1,0 +1,55 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model token {
+  itokenid      Int      @id @default(autoincrement())
+  dtcreated     DateTime @default(now())
+  dtupdated     DateTime @updatedAt
+  vtoken        String   @db.VarChar(255)
+  dtvigencia    DateTime
+  iused         Boolean  @default(false)
+  ireferenciaid Int
+  cattoken      cattoken @relation(fields: [icattokenid], references: [icattokenid])
+  icattokenid   Int
+}
+
+model cattoken {
+  icattokenid Int      @id @default(autoincrement())
+  dtcreated   DateTime @default(now())
+  dtupdated   DateTime @updatedAt
+  name        String   @db.VarChar(255)
+  token       token[]
+}
+
+model catorganizacion {
+    iorganizacionid     Int      @id @default(autoincrement())
+    dtcreated           DateTime @default(now())
+    dtupdated           DateTime @updatedAt
+    vorganizacionnombre String   @db.VarChar(255)
+    vrfc                String   @db.VarChar(20)
+    iactivo             Boolean  @default(true)
+    //owner Usuario @relation(fields: [iownerid], references: [iusuarioid])
+    iownerid Int
+    rel_usuariorganizacionrole rel_usuariorganizacionrole[]
+}
+
+model rel_usuariorganizacionrole {
+    id           Int      @id @default(autoincrement())
+    createdAt    DateTime @default(now())
+    updatedAt    DateTime @updatedAt
+    //usuario Usuario @relation(fields: [iusuarioid], references: [iusuarioid])
+    iusuarioid Int
+    organizacion catorganizacion @relation(fields: [iorgid], references: [iorganizacionid])
+    iorgid Int
+    //role catroles @relation(fields: [iroleid], references: [iroleid])
+    iroleid Int
+}

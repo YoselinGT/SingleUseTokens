@@ -1,0 +1,14 @@
+/node_modules
+
+# production
+/dist
+
+# misc
+.DS_Store
+.config.local
+.env.development.local
+.config.developer
+package.json.developer
+package.json.local
+.env.test.local
+.env.production.local
